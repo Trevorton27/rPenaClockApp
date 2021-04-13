@@ -32,17 +32,24 @@ setInterval(function() {
     document.getElementById("clock").innerHTML = getTime();
 }, 1000)
 
-//consolidate code for getting and formatting the current time
+//consolidate functionality for getting and formatting the current time
 function getTime() {
+    //calling a new Date object to get the most recent hour / minute / second
     const date = new Date();
     const hour = date.getHours();
     const minute = date.getMinutes();
     const seconds = date.getSeconds();
+
+    //hours are from 0-23, 12-23 is going to be PM
     const meridiem = hour > 11 ? "PM" : "AM";
     
+    //adding '0' to front of seconds and minutes if < 10
     const secondsFormatted = seconds < 10 ? "0" + seconds : seconds;
     const minutesFormatted = minute < 10 ? "0" + minute : minute;
-    const hourFormatted = hour % 12 === 0 ? "12" : hour % 12;
+
+    //hours are from 0-23, converting to 1-12 AM/PM format at adding 0 if < 10
+    const hourConverted = hour % 12 === 0 ? "12" : hour % 12;
+    const hourFormatted = hourConverted < 10 ? "0" + hourConverted : hourConverted;
 
     return hourFormatted + ":" + minutesFormatted + ":" + secondsFormatted + " " + meridiem;
 
