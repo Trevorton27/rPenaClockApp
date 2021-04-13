@@ -1,0 +1,18 @@
+html{
+    text-align: center;
+    font-family: 'Share Tech Mono', sans-serif;
+    background-color: black;
+    color: rgb(10, 255, 10);
+}
+
+#title{
+    font-size: 64px;
+}
+
+#clock{
+    font-size: 120px;
+}
+
+#date{
+    font-size: 48px;
+}
