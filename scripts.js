@@ -1,56 +1,84 @@
-//get todays date
-const date = new Date();
+const showTime = () => {
+  //calling a new Date object to get the most recent hour / minute / second
 
-//get the current month name
-const monthsOfYear = ["January", "Feburary", 
-                      "March", "April", 
-                      "May", "June", 
-                      "July", "August", 
-                      "September", "October", 
-                      "November", "December"];
-const month = monthsOfYear[date.getMonth()];
+  const time = new Date();
+  const hour = time.getHours();
+  const minute = addLeadingZero(time.getMinutes());
+  const seconds = addLeadingZero(time.getSeconds());
+
+  const isAm = hour < 12 || hour === 0;
+  let amPm = isAm ? 'AM' : 'PM';
+
+  return `${renderTwelveHourClock(hour)}:${minute}:${seconds} ${amPm}`;
+};
+
+const addLeadingZero = (number) => {
+  return number < 10 ? '0' + number : number;
+};
+
+const renderTwelveHourClock = (whatHour) => {
+  whatHour = whatHour >= 13 ? whatHour - 12 : whatHour;
+
+  whatHour = whatHour === 0 ? whatHour + 12 : whatHour;
+  return whatHour;
+};
+
+const showDate = () => {
+  const date = new Date();
+
+  const weekday = daysOfWeek[date.getDay()];
+  const month = monthsOfYear[date.getMonth()];
+  const todaysDate = addDateSuffix(date.getDate());
+  const year = date.getFullYear();
+
+  return `${renderTwelveHourClock(weekday)}, ${month} ${todaysDate} ${year}`;
+};
+
+function addDateSuffix(date) {
+  if (date < 10 || date > 20) {
+    switch (date % 10) {
+      case 1:
+        return date + 'st';
+      case 2:
+        return date + 'nd';
+      case 3:
+        return date + 'rd';
+    }
+  }
+  return date + 'th';
+}
+
+const renderTimeDateDisplay = () => {
+  document.getElementById('clock').textContent = showTime();
+  document.getElementById('date').textContent = showDate();
+};
+
+const monthsOfYear = [
+  'January',
+  'Feburary',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December'
+];
 
 //get day of the week + day of the month
-const daysOfWeek = ["Sunday", "Monday", 
-                    "Tuesday", "Wednesday", 
-                    "Thursday", "Friday", 
-                    "Saturday"]
-const weekday = daysOfWeek[date.getDay()];
-const day = date.getDate();
+const daysOfWeek = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday'
+];
 
-//get current year
-const year = date.getFullYear();
+renderTimeDateDisplay();
 
-
-//write date and time on initial load
-document.getElementById("clock").innerHTML = getTime();
-document.getElementById("date").innerHTML = weekday + ", " + month + " " + day + " " + year;
-
-
-//update the "clock" element in the HTML file every 1000ms (1s)
-setInterval(function() {
-    document.getElementById("clock").innerHTML = getTime();
-}, 1000)
-
-//consolidate functionality for getting and formatting the current time
-function getTime() {
-    //calling a new Date object to get the most recent hour / minute / second
-    const date = new Date();
-    const hour = date.getHours();
-    const minute = date.getMinutes();
-    const seconds = date.getSeconds();
-
-    //hours are from 0-23, 12-23 is going to be PM
-    const meridiem = hour > 11 ? "PM" : "AM";
-    
-    //adding '0' to front of seconds and minutes if < 10
-    const secondsFormatted = seconds < 10 ? "0" + seconds : seconds;
-    const minutesFormatted = minute < 10 ? "0" + minute : minute;
-
-    //hours are from 0-23, converting to 1-12 AM/PM format at adding 0 if < 10
-    const hourConverted = hour % 12 === 0 ? "12" : hour % 12;
-    const hourFormatted = hourConverted < 10 ? "0" + hourConverted : hourConverted;
-
-    return hourFormatted + ":" + minutesFormatted + ":" + secondsFormatted + " " + meridiem;
-
-}
+setInterval(renderTimeDateDisplay, 1000);
